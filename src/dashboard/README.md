@@ -1,0 +1,3 @@
+# Dashboard
+
+Nuxt files here
