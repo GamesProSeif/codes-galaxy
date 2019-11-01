@@ -1,7 +1,13 @@
 import { logger, TOPICS, EVENTS } from './util/logger';
 
-logger.info('Starting app', { topic: TOPICS.MAIN, event: EVENTS.INIT });
-
 import './util/env';
-import './bot/bot';
-import './server/server';
+import runBot from './bot/bot';
+import runServer from './server/server';
+
+const start = async () => {
+	logger.info('Starting app', { topic: TOPICS.MAIN, event: EVENTS.INIT });
+	await runBot();
+	await runServer();
+};
+
+start();

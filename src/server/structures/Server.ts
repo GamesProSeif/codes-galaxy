@@ -5,7 +5,7 @@ import * as morgan from 'morgan';
 import { join, resolve } from 'path';
 import { Connection } from 'typeorm';
 import { Logger } from 'winston';
-// import Database from './Database';
+import Database from './Database';
 import Route from './Route';
 import { readdirRecursive, parseRouteEndpoints } from '../../util';
 import { logger, TOPICS, EVENTS } from '../../util/logger';
@@ -81,9 +81,9 @@ export default class Server {
 			});
 		});
 
-		// this.db = Database;
-		// await this.db.connect();
-		// this.logger.info('Connected to DB', { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
+		this.db = Database;
+		await this.db.connect();
+		this.logger.info('Connected to DB', { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
 
 		// // Build only in dev mode
 		// if (config.dev) {
