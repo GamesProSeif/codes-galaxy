@@ -31,7 +31,7 @@ export default class CodePOST extends Route {
 		code.title = req.body.title;
 		code.language = req.body.language;
 		code.description = req.body.description;
-		code.content = req.body.description;
+		code.content = req.body.content;
 		code.tags = req.body.tags || [];
 
 		await codeRepo.save(code);
