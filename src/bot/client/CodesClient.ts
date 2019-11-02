@@ -19,7 +19,7 @@ const commandsPath = join(__dirname, '..', 'commands/');
 const inhibitorsPath = join(__dirname, '..', 'inhibitors/');
 const listenersPath = join(__dirname, '..', 'listeners/');
 
-export default class GopnikClient extends AkairoClient {
+export default class CodesClient extends AkairoClient {
 	public logger = logger;
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
