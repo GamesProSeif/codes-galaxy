@@ -1,6 +1,5 @@
 import { ConnectionManager } from 'typeorm';
-// import models
-
+import Code from '../models/Code';
 
 const manager = new ConnectionManager();
 const connection = manager.create({
@@ -8,8 +7,8 @@ const connection = manager.create({
 	url: process.env.DB_URI,
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	// entities: [],
-	database: process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
+	entities: [Code],
+	database: process.env.NODE_ENV === 'development' ? 'codes-dev' : 'codes-prod'
 });
 
 export default connection;
