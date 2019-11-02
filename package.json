@@ -8,12 +8,15 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node .",
     "dev": "cross-env NODE_ENV=development node .",
-    "build": "tsc",
+    "build": "nuxt build && tsc",
     "watch": "tsc -w",
     "lint": "eslint src --ext .ts",
     "fix": "eslint src --ext .ts --fix"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.8.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.4",
     "common-tags": "^1.8.0",
     "cross-env": "^6.0.3",
     "discord-akairo": "discord-akairo/discord-akairo",
@@ -22,6 +25,7 @@
     "mongodb": "^3.3.3",
     "morgan": "^1.9.1",
     "node-fetch": "^2.6.0",
+    "nuxt": "^2.10.2",
     "shortid": "^2.2.15",
     "typeorm": "^0.2.20",
     "winston": "^3.2.1",

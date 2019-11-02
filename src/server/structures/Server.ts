@@ -11,10 +11,10 @@ import { readdirRecursive, parseRouteEndpoints } from '../../util';
 import { logger, TOPICS, EVENTS } from '../../util/logger';
 import { ERRORS, MESSAGES } from '../../util/constants';
 
-// // Import and Set Nuxt.js options
-// const { Nuxt, Builder } = require('nuxt');
-// const config = require('../../nuxt.config.js');
-// config.dev = process.env.NODE_ENV !== 'production';
+// Import and Set Nuxt.js options
+const { Nuxt, Builder } = require('nuxt');
+const config = require('../../../nuxt.config.js');
+config.dev = process.env.NODE_ENV !== 'production';
 
 export default class Server {
 	public server: Express;
@@ -22,8 +22,8 @@ export default class Server {
 	public db!: Connection;
 	public nuxt: any;
 	public path: string;
-	// public host: string;
-	// public port: string;
+	public host: string;
+	public port: string;
 	public readonly API_METHODS = resolve(join(__dirname, '..', 'api'));
 	public readonly DEV = process.env.NODE_ENV === 'development';
 	public methods: { [key: string]: Route } = {};
@@ -34,21 +34,21 @@ export default class Server {
 		this.path = path;
 		this.logger = logger;
 
-		// // Init Nuxt.js
-		// this.nuxt = new Nuxt(config);
+		// Init Nuxt.js
+		this.nuxt = new Nuxt(config);
 
-		// const { host, port } = this.nuxt.options.server;
-		// this.host = host;
-		// this.port = port;
+		const { host, port } = this.nuxt.options.server;
+		this.host = host;
+		this.port = port;
 
-		// if (process.env.NODE_ENV === 'production') {
-		// 	this.server.enable('trust proxy');
-		// 	// this.server.use((req, res) => {
-		// 	// 	if (!req.secure) {
-		// 	// 		res.redirect(`https://${req.headers.host}${req.url}`);
-		// 	// 	}
-		// 	// });
-		// }
+		if (process.env.NODE_ENV === 'production') {
+			this.server.enable('trust proxy');
+			// this.server.use((req, res) => {
+			// 	if (!req.secure) {
+			// 		res.redirect(`https://${req.headers.host}${req.url}`);
+			// 	}
+			// });
+		}
 	}
 
 	private setMiddlewares() {
@@ -86,17 +86,17 @@ export default class Server {
 		await this.db.connect();
 		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
 
-		// // Build only in dev mode
-		// if (config.dev) {
-		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.DEV.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
-		// 	const builder = new Builder(this.nuxt);
-		// 	await builder.build();
-		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.DEV.READY, { topic: TOPICS.NUXT, event: EVENTS.INIT });
-		// } else {
-		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.PROD.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
-		// 	await this.nuxt.ready();
-		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.PROD.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
-		// }
+		// Build only in dev mode
+		if (config.dev) {
+			this.logger.info(MESSAGES.SERVER.NUXT.BUILD.DEV.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
+			const builder = new Builder(this.nuxt);
+			await builder.build();
+			this.logger.info(MESSAGES.SERVER.NUXT.BUILD.DEV.READY, { topic: TOPICS.NUXT, event: EVENTS.INIT });
+		} else {
+			this.logger.info(MESSAGES.SERVER.NUXT.BUILD.PROD.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
+			await this.nuxt.ready();
+			this.logger.info(MESSAGES.SERVER.NUXT.BUILD.PROD.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
+		}
 
 		this.setMiddlewares();
 		this.logger.info(MESSAGES.SERVER.MIDDLEWARES.ALL, { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
@@ -111,10 +111,10 @@ export default class Server {
 			}
 		);
 
-		// this.server.get('/favicon.ico', (_, res) => res.redirect('/favicon.png'));
+		this.server.get('/favicon.ico', (_, res) => res.redirect('/favicon.png'));
 
-		// this.server.use(this.nuxt.render);
-		// this.logger.debug(MESSAGES.SERVER.NUXT.RENDERER.LOADED, { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
+		this.server.use(this.nuxt.render);
+		this.logger.debug(MESSAGES.SERVER.NUXT.RENDERER.LOADED, { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
 
 		// Listen the server
 		this.server.listen(process.env.SERVER_PORT!);
