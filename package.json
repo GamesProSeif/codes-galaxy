@@ -1,6 +1,13 @@
 {
+	"name": "codes-support",
 	"private": true,
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"scripts": {
+		"build": "lerna run build"
+	},
+	"devDependencies": {
+		"lerna": "^3.18.3"
+	}
 }
