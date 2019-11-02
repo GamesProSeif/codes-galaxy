@@ -1,0 +1,24 @@
+{
+	"name": "@codes/dashboard",
+	"version": "1.0.0",
+	"author": "GamesProSeif",
+	"license": "UNLICENSED",
+	"scripts": {
+		"start": "cross-env NODE_ENV=production nuxt start",
+		"dev": "cross-env NODE_ENV=development nuxt",
+		"build": "nuxt build",
+		"generate": "nuxt generate"
+	},
+	"dependencies": {
+		"@nuxtjs/axios": "^5.8.0",
+		"bootstrap": "^4.3.1",
+		"bootstrap-vue": "^2.0.4",
+		"cross-env": "^6.0.3",
+		"nuxt": "^2.10.2"
+	},
+	"peerDependencies": {
+		"jquery": "^3.4.1",
+		"popper.js": "^1.16.0",
+		"vue": "^2.6.10"
+	}
+}

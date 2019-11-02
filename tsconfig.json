@@ -1,37 +1,25 @@
 {
 	"compilerOptions": {
-		"baseUrl": "./src",
-		"paths": {
-			"@util/*": [
-				"util/*"
-			]
-		},
-		"strict": true,
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"target": "es2017",
-		"pretty": true,
 		"removeComments": true,
+
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+
+		"pretty": true,
 		"allowSyntheticDefaultImports": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"lib": [
-			"esnext",
-			"esnext.array",
-			"esnext.asynciterable",
-			"esnext.intl",
-			"esnext.symbol"
-		],
 		"incremental": true,
-		"sourceRoot": "./src",
-		"outDir": "dist",
 		"inlineSources": true,
-		"inlineSourceMap": true
-	},
-	"include": [
-		"./src/**/*", "typings"
-	],
-	"exclude": [
-		"node_modules", "dist"
-	]
+		"inlineSourceMap": true,
+	}
 }

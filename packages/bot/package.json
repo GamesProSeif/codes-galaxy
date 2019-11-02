@@ -1,0 +1,40 @@
+{
+	"name": "@codes/bot",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"author": "GamesProSeif",
+	"license": "UNLICENSED",
+	"scripts": {
+		"start": "cross-env NODE_ENV=production node .",
+		"dev": "cross-env NODE_ENV=development node .",
+		"build": "tsc",
+		"build:watch": "tsc -w",
+		"lint": "eslint src --ext .ts",
+		"lint:fix": "eslint src --ext .ts --fix"
+	},
+	"dependencies": {
+		"cross-env": "^6.0.3",
+		"discord-akairo": "discord-akairo/discord-akairo",
+		"discord.js": "discordjs/discord.js",
+		"node-fetch": "^2.6.0"
+	},
+	"devDependencies": {
+		"@types/node-fetch": "^2.5.3",
+		"@types/ws": "^6.0.3",
+		"@typescript-eslint/eslint-plugin": "^2.6.0",
+		"@typescript-eslint/parser": "^2.6.0",
+		"eslint": "^6.6.0",
+		"eslint-config-marine": "^5.3.2",
+		"typescript": "^3.6.4"
+	},
+	"eslintConfig": {
+		"extends": "marine/node",
+		"rules": {
+			"@typescript-eslint/explicit-member-accessibility": "off"
+		}
+	},
+	"optionalDependencies": {
+		"bufferutil": "^4.0.1",
+		"zlib-sync": "^0.1.6"
+	}
+}
