@@ -1,6 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { COLORS, MESSAGES } from '../../../util/constants';
 
 export default class PingCommand extends Command {
 	constructor() {
@@ -8,7 +9,7 @@ export default class PingCommand extends Command {
 			aliases: ['ping'],
 			category: 'util',
 			description: {
-				content: 'Displays response time'
+				content: MESSAGES.COMMANDS.UTIL.PING.DESCRIPTION
 			}
 		});
 	}
@@ -21,7 +22,7 @@ export default class PingCommand extends Command {
 		const botHeartbeat = Math.round(this.client.ws.ping);
 
 		const embed = new MessageEmbed()
-			.setColor(this.client.colors.primary)
+			.setColor(COLORS.PRIMARY)
 			.setTitle('Pong!')
 			.setDescription(
 				stripIndents`

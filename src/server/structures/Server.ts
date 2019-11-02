@@ -9,6 +9,7 @@ import Database from './Database';
 import Route from './Route';
 import { readdirRecursive, parseRouteEndpoints } from '../../util';
 import { logger, TOPICS, EVENTS } from '../../util/logger';
+import { ERRORS, MESSAGES } from '../../util/constants';
 
 // // Import and Set Nuxt.js options
 // const { Nuxt, Builder } = require('nuxt');
@@ -53,9 +54,9 @@ export default class Server {
 	private setMiddlewares() {
 		// Body Parser Middleware
 		this.server.use(json());
-		this.logger.debug('Loaded json middleware', { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
+		this.logger.debug(MESSAGES.SERVER.MIDDLEWARES.LOADED('json'), { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
 		this.server.use(urlencoded({ extended: false }));
-		this.logger.debug('Loaded urlencoded middleware', { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
+		this.logger.debug(MESSAGES.SERVER.MIDDLEWARES.LOADED('urlencoded'), { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
 
 		this.server.use(
 			morgan(
@@ -70,7 +71,7 @@ export default class Server {
 				}
 			)
 		);
-		this.logger.debug('Loaded morgan middleware', { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
+		this.logger.debug(MESSAGES.SERVER.MIDDLEWARES.LOADED('morgan'), { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
 	}
 
 	public async init() {
@@ -83,29 +84,27 @@ export default class Server {
 
 		this.db = Database;
 		await this.db.connect();
-		this.logger.info('Connected to DB', { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
 
 		// // Build only in dev mode
 		// if (config.dev) {
-		// 	this.logger.info('Running Nuxt builder in dev mode', { topic: TOPICS.NUXT, event: EVENTS.INIT });
+		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.DEV.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
 		// 	const builder = new Builder(this.nuxt);
 		// 	await builder.build();
-		// 	this.logger.info('Finished building Nuxt in dev mode', { topic: TOPICS.NUXT, event: EVENTS.INIT });
+		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.DEV.READY, { topic: TOPICS.NUXT, event: EVENTS.INIT });
 		// } else {
-		// 	this.logger.info('Running Nuxt in production mode', { topic: TOPICS.NUXT, event: EVENTS.INIT });
+		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.PROD.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
 		// 	await this.nuxt.ready();
-		// 	this.logger.info('Nuxt ready', { topic: TOPICS.NUXT, event: EVENTS.INIT });
+		// 	this.logger.info(MESSAGES.SERVER.NUXT.BUILD.PROD.BEGIN, { topic: TOPICS.NUXT, event: EVENTS.INIT });
 		// }
 
 		this.setMiddlewares();
-		this.logger.info('Loaded all pre middlewares', { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.SERVER.MIDDLEWARES.ALL, { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
 
 		await this.loadAll();
 
 		this.logger.info(
-			`Loaded ${Object.values(this.methods).length} routes with ${
-				Object.values(this.endpoints).length
-			} endpoints`,
+			MESSAGES.SERVER.HANDLER.LOADED(Object.values(this.methods).length, Object.values(this.endpoints).length),
 			{
 				topic: TOPICS.EXPRESS,
 				event: EVENTS.INIT
@@ -115,11 +114,11 @@ export default class Server {
 		// this.server.get('/favicon.ico', (_, res) => res.redirect('/favicon.png'));
 
 		// this.server.use(this.nuxt.render);
-		// this.logger.debug('Loaded Nuxt renderer', { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
+		// this.logger.debug(MESSAGES.SERVER.NUXT.RENDERER.LOADED, { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
 
 		// Listen the server
 		this.server.listen(process.env.SERVER_PORT!);
-		this.logger.info(`Server listening on http://localhost:${process.env.SERVER_PORT!}`, {
+		this.logger.info(MESSAGES.SERVER.LISTENING(process.env.SERVER_PORT!), {
 			topic: TOPICS.EXPRESS,
 			event: EVENTS.READY
 		});
@@ -127,7 +126,7 @@ export default class Server {
 
 	public register(file: Route): Route {
 		if (Object.keys(this.methods).includes(file.id)) {
-			throw new Error(`Already loaded route ${file.id}`);
+			throw new Error(ERRORS.SERVER.ROUTE_ALREADY_LOADED(file.id));
 		}
 
 		parseRouteEndpoints(file, this.path, this.endpoints);
@@ -144,7 +143,7 @@ export default class Server {
 				this.logger.error(error, { topic: TOPICS.EXPRESS_HANDLER });
 				res
 					.status(500)
-					.json({ error: error.message || 'Something went wrong' });
+					.json({ error: error.message || ERRORS.SERVER.HANDLER_ERROR });
 			}
 		};
 
@@ -157,7 +156,7 @@ export default class Server {
 		}
 
 		if (this.DEV) {
-			this.logger.debug(`Loaded route: ${file.id}`, {
+			this.logger.debug(MESSAGES.SERVER.HANDLER.ROUTE_LOADED(file.id), {
 				topic: TOPICS.EXPRESS,
 				event: EVENTS.INIT
 			});

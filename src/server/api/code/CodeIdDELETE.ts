@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Route from '../../structures/Route';
 import Code from '../../models/Code';
 import { TOPICS, EVENTS } from '../../../util/logger';
+import { MESSAGES } from '../../../util/constants';
 
 export default class CodeIdDELETE extends Route {
 	public constructor() {
@@ -16,7 +17,7 @@ export default class CodeIdDELETE extends Route {
 		const code = await codeRepo.findOne({ shortid: req.params.id });
 
 		if (!code) {
-			res.status(404).json({ error: 'Code not found' });
+			res.status(404).json({ error: MESSAGES.ROUTES.CODE_ID_DELETE.NOT_FOUND });
 			return;
 		}
 

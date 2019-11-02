@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Route from '../../structures/Route';
 import Code from '../../models/Code';
+import { MESSAGES } from '../../../util/constants';
 
 export default class CodeGET extends Route {
 	public constructor() {
@@ -17,7 +18,7 @@ export default class CodeGET extends Route {
 		});
 
 		if (!codes.length) {
-			res.status(404).json({ error: 'No codes in database' });
+			res.status(404).json({ error: MESSAGES.ROUTES.CODE_GET.NOT_FOUND });
 			return;
 		}
 

@@ -5,18 +5,12 @@ import {
 	ListenerHandler
 } from 'discord-akairo';
 import { join } from 'path';
-import { logger, EVENTS, TOPICS } from '../../util/logger';
 import { Logger } from 'winston';
+import { logger, EVENTS, TOPICS } from '../../util/logger';
+import { MESSAGES } from '../../util/constants';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
-		colors: {
-			primary: number;
-			secondary: number;
-			info: number;
-			warning: number;
-			error: number;
-		};
 		logger: Logger;
 	}
 }
@@ -28,28 +22,18 @@ const listenersPath = join(__dirname, '..', 'listeners/');
 export default class GopnikClient extends AkairoClient {
 	public logger = logger;
 
-	public colors = {
-		primary: 0x2ecc71,
-		secondary: 0x8e44ad,
-		info: 0x0891eb,
-		warning: 0xf1c40e,
-		error: 0xe74c3c
-	};
-
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		aliasReplacement: /-/g,
 		allowMention: true,
 		argumentDefaults: {
 			prompt: {
-				cancel: 'Command has been cancelled.',
-				ended: 'Too many retries, command has been cancelled.',
-				modifyRetry: (message, text) =>
-					`${message.member}, ${text}\n\nType \`cancel\` to cancel this command.`,
-				modifyStart: (message, text) =>
-					`${message.member}, ${text}\n\nType \`cancel\` to cancel this command.`,
+				cancel: MESSAGES.COMMAND_HANDLER.PROMPT.CANCEL,
+				ended: MESSAGES.COMMAND_HANDLER.PROMPT.ENDED,
+				modifyStart: MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_START,
+				modifyRetry: MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_RETRY,
 				retries: 3,
 				time: 30000,
-				timeout: 'Time ran out, command has been cancelled.'
+				timeout: MESSAGES.COMMAND_HANDLER.PROMPT.TIMEOUT
 			}
 		},
 		commandUtil: true,
@@ -79,7 +63,7 @@ export default class GopnikClient extends AkairoClient {
 	}
 
 	private _init() {
-		this.logger.info('Initialising Discord client', { topic: TOPICS.DISCORD, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.CLIENT.INIT, { topic: TOPICS.DISCORD, event: EVENTS.INIT });
 		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		this.commandHandler.useListenerHandler(this.listenerHandler);
 
@@ -91,10 +75,10 @@ export default class GopnikClient extends AkairoClient {
 		});
 
 		this.commandHandler.loadAll();
-		this.logger.info('Command handler loaded', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.COMMAND_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.inhibitorHandler.loadAll();
-		this.logger.info('Inhibitor handler loaded', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.INHIBITOR_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 		this.listenerHandler.loadAll();
-		this.logger.info('Listener handler loaded', { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
+		this.logger.info(MESSAGES.LISTENER_HANDLER.LOADED, { topic: TOPICS.DISCORD_AKAIRO, event: EVENTS.INIT });
 	}
 }

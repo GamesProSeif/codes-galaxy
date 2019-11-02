@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Route from '../../structures/Route';
 import Code from '../../models/Code';
+import { MESSAGES } from '../../../util/constants';
 
 export default class CodeIdGET extends Route {
 	public constructor() {
@@ -15,7 +16,7 @@ export default class CodeIdGET extends Route {
 		const code = await codeRepo.findOne({ shortid: req.params.id });
 
 		if (!code) {
-			res.status(404).json({ error: 'Code not found' });
+			res.status(404).json({ error: MESSAGES.ROUTES.CODE_ID_GET.NOT_FOUND });
 			return;
 		}
 

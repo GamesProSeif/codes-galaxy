@@ -1,7 +1,7 @@
 // Mainly inspired by Crawl's bot "Yukikaze" https://github.com/Naval-Base/yukikaze/
-import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
+import { COLORS, MESSAGES } from '../../../util/constants';
 
 export default class HelpCommand extends Command {
 	constructor() {
@@ -16,7 +16,7 @@ export default class HelpCommand extends Command {
 			],
 			category: 'util',
 			description: {
-				content: 'Displays information about a command',
+				content: MESSAGES.COMMANDS.UTIL.HELP.DESCRIPTION,
 				usage: '[command]',
 				examples: ['ping']
 			}
@@ -24,8 +24,7 @@ export default class HelpCommand extends Command {
 	}
 
 	public async exec(message: Message, { command }: { command: Command }) {
-		const prefix = this.handler.prefix;
-		const embed = new MessageEmbed().setColor(this.client.colors.info);
+		const embed = new MessageEmbed().setColor(COLORS.INFO);
 
 		if (command) {
 			embed
@@ -38,7 +37,7 @@ export default class HelpCommand extends Command {
 				)
 				.addField(
 					'❯ Description',
-					command.description.content || 'No Description provided'
+					command.description.content || MESSAGES.COMMANDS.UTIL.HELP.NO_DESCRIPTION
 				);
 
 			if (command.aliases.length > 1) {
@@ -55,16 +54,9 @@ export default class HelpCommand extends Command {
 		} else {
 			embed
 				.setTitle('❯ Commands')
-				.setDescription(
-					stripIndents`
-					A list of available commands.
-					For additional info on a command, type \`${prefix}help <command>\`
-					<> mean required, [] mean optional
-					Numbers represent modules
-					`
-				)
+				.setDescription(MESSAGES.COMMANDS.UTIL.HELP.REPLY(this.handler.prefix as string))
 				.setFooter(
-					`${this.handler.modules.size} Modules`,
+					MESSAGES.COMMANDS.UTIL.HELP.FOOTER(this.handler.modules.size),
 					this.client.user!.displayAvatarURL()
 				);
 
