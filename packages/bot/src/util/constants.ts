@@ -37,6 +37,13 @@ export const MESSAGES = {
 	},
 	COMMANDS: {
 		UTIL: {
+			EVAL: {
+				DESCRIPTION: 'You can\'t access this command anyways',
+				PROMPT: {
+					START: 'What is the code you want to evaluate?',
+					RETRY: 'That is not valid code! Try again'
+				}
+			},
 			HELP: {
 				DESCRIPTION: 'Displays information about a command',
 				REPLY: (prefix: string) =>
