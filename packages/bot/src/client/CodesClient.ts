@@ -5,12 +5,15 @@ import {
 	ListenerHandler
 } from 'discord-akairo';
 import { join } from 'path';
+import { Connection } from 'typeorm';
 import { Logger } from 'winston';
+import { Database } from '@codes/models';
 import { logger, EVENTS, TOPICS } from '../util/logger';
 import { MESSAGES } from '../util/constants';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
+		db: Connection;
 		logger: Logger;
 	}
 }
@@ -21,6 +24,7 @@ const listenersPath = join(__dirname, '..', 'listeners/');
 
 export default class CodesClient extends AkairoClient {
 	public logger = logger;
+	public db = Database;
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		aliasReplacement: /-/g,
@@ -58,12 +62,16 @@ export default class CodesClient extends AkairoClient {
 	}
 
 	public async start(token: string) {
-		this._init();
+		await this._init();
 		return this.login(token);
 	}
 
-	private _init() {
+	private async _init() {
 		this.logger.info(MESSAGES.CLIENT.INIT, { topic: TOPICS.DISCORD, event: EVENTS.INIT });
+
+		await this.db.connect();
+		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
+
 		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
 		this.commandHandler.useListenerHandler(this.listenerHandler);
 

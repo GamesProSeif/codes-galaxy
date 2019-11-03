@@ -5,6 +5,7 @@ import * as DailyRotateFile from 'winston-daily-rotate-file';
 export enum TOPICS {
 	DISCORD = 'DISCORD',
 	DISCORD_AKAIRO = 'DISCORD_AKAIRO',
+	TYPEORM = 'TYPEORM',
 	UNHANDLED_REJECTION = 'UNHANDLED_REJECTION'
 }
 
