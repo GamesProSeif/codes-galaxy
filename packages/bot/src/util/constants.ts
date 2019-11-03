@@ -80,7 +80,8 @@ export const MESSAGES = {
 };
 
 export enum IPC_TYPE {
-	GUILD = 1,
+	CLIENT,
+	GUILD,
 	USER,
 	MEMBER,
 	ROLE

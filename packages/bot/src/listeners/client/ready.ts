@@ -26,6 +26,10 @@ export default class Ready extends Listener {
 				let res;
 				let tmp;
 				switch (message.data.type) {
+					case IPC_TYPE.CLIENT:
+						res = this.client.toJSON();
+						message.reply(res);
+						break;
 					case IPC_TYPE.GUILD:
 						res = this.client.guilds.get(message.data.type.guild_id);
 						message.reply(res ? res.toJSON() : undefined);
