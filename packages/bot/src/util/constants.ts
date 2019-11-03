@@ -1,5 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Message } from 'discord.js';
+import { ServerSocket, NodeMessage } from 'veza';
 
 export enum COLORS {
 	PRIMARY = 0x2ecc71,
@@ -36,6 +37,13 @@ export const MESSAGES = {
 	},
 	COMMANDS: {
 		UTIL: {
+			EVAL: {
+				DESCRIPTION: 'You can\'t access this command anyways',
+				PROMPT: {
+					START: 'What is the code you want to evaluate?',
+					RETRY: 'That is not valid code! Try again'
+				}
+			},
 			HELP: {
 				DESCRIPTION: 'Displays information about a command',
 				REPLY: (prefix: string) =>
@@ -61,8 +69,23 @@ export const MESSAGES = {
 	},
 	DB: {
 		CONNECTED: 'Connected to DB'
+	},
+	IPC: {
+		OPEN: (port: string | number) => `IPC server opened on port ${port}`,
+		CLOSE: 'IPC server closed',
+		CONNECT: (client: ServerSocket) => `Client ${client.name} connected`,
+		DISCONNECT: (client: ServerSocket) => `Client ${client.name} disconnected`,
+		MESSAGE: ({ data }: NodeMessage, client: ServerSocket) => `Received message from ${client.name}: ${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}`
 	}
 };
+
+export enum IPC_TYPE {
+	CLIENT,
+	GUILD,
+	USER,
+	MEMBER,
+	ROLE
+}
 
 export const ERRORS = {
 	SERVER: {

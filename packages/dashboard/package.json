@@ -16,7 +16,7 @@
 		"cross-env": "^6.0.3",
 		"nuxt": "^2.10.2"
 	},
-	"peerDependencies": {
+	"optionalDependencies": {
 		"jquery": "^3.4.1",
 		"popper.js": "^1.16.0",
 		"vue": "^2.6.10"

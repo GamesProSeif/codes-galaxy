@@ -1,3 +1,5 @@
+import { ClientSocket } from 'veza';
+
 export const MESSAGES = {
 	SERVER: {
 		MIDDLEWARES: {
@@ -13,6 +15,13 @@ export const MESSAGES = {
 	},
 	DB: {
 		CONNECTED: 'Connected to DB'
+	},
+	IPC: {
+		CONNECT: (client: ClientSocket) => `Connected to ${client.name}`,
+		CONNECTING: (port: string | number) => `Connecting to port ${port}`,
+		DISCONNECT: (client: ClientSocket) => `Disconnected from ${client.name}`,
+		NO_CONNECTION: (port: string | number) => `Cannot connect to IPC server on port ${port}. Exiting...`,
+		READY: (client: ClientSocket) => `Connection to server ${client.name} ready`
 	},
 	ROUTES: {
 		CODE_GET: {
