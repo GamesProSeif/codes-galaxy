@@ -5,7 +5,7 @@ import * as morgan from 'morgan';
 import { join, resolve, posix as path } from 'path';
 import { Connection } from 'typeorm';
 import { Logger } from 'winston';
-import Database from './Database';
+import { Database } from '@codes/models';
 import Route from './Route';
 import { logger, TOPICS, EVENTS } from '../util/logger';
 import { readdirRecursive } from '../util';
@@ -15,9 +15,8 @@ export default class Server {
 	public server: Express;
 	public logger: Logger;
 	public db!: Connection;
-	public nuxt: any;
 	public path: string;
-	public port: string;
+	public port = process.env.SERVER_PORT || '5000';
 	public readonly API_METHODS = resolve(join(__dirname, '..', 'api'));
 	public readonly DEV = process.env.NODE_ENV === 'development';
 	public methods: { [key: string]: Route } = {};
@@ -74,10 +73,10 @@ export default class Server {
 
 		route.endpoint!.forEach((r: string | RegExp) => {
 			r = r.toString();
-			if (Object.keys(endpoints).includes(r)) {
-				// Find another method to check for duplicate routes (make account for methods GET/POST/DELETE/...)
-				// throw new Error(`Duplicate endpoint found ${r} - conflict: ${route.id} and ${endpoints[r]}`);
-			}
+			// if (Object.keys(endpoints).includes(r)) {
+			// Find another method to check for duplicate routes (make account for methods GET/POST/DELETE/...)
+			// throw new Error(`Duplicate endpoint found ${r} - conflict: ${route.id} and ${endpoints[r]}`);
+			// }
 
 			endpoints[r] = route.id;
 		});
@@ -113,8 +112,8 @@ export default class Server {
 		this.server.get('/favicon.ico', (_, res) => res.redirect('/favicon.png'));
 
 		// Listen the server
-		this.server.listen(process.env.SERVER_PORT!);
-		this.logger.info(MESSAGES.SERVER.LISTENING(process.env.SERVER_PORT!), {
+		this.server.listen(this.port);
+		this.logger.info(MESSAGES.SERVER.LISTENING(this.port), {
 			topic: TOPICS.EXPRESS,
 			event: EVENTS.READY
 		});
@@ -165,7 +164,6 @@ export default class Server {
 		const methodFiles = readdirRecursive(this.API_METHODS);
 
 		for (const method of methodFiles) {
-			// eslint-disable-next-line @typescript-eslint/no-require-imports
 			const file: Route = new (require(method)).default();
 
 			file.init({ logger: this.logger, db: this.db });

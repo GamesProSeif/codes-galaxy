@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Route from '../../structures/Route';
-import Code from '../../models/Code';
+import { Code } from '@codes/models';
 import { TOPICS, EVENTS } from '../../util/logger';
 import { MESSAGES } from '../../util/constants';
 
