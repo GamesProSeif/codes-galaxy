@@ -6,15 +6,21 @@ import {
 } from 'discord-akairo';
 import { join } from 'path';
 import { Connection } from 'typeorm';
+import { Server } from 'veza';
 import { Logger } from 'winston';
 import { Database } from '@codes/models';
 import { logger, EVENTS, TOPICS } from '../util/logger';
 import { MESSAGES } from '../util/constants';
 
+process.on('unhandledRejection', err => {
+	logger.error(err as string, { topic: TOPICS.UNHANDLED_REJECTION, event: EVENTS.ERROR });
+});
+
 declare module 'discord-akairo' {
 	interface AkairoClient {
 		db: Connection;
 		logger: Logger;
+		ipc: Server;
 	}
 }
 
@@ -25,6 +31,7 @@ const listenersPath = join(__dirname, '..', 'listeners/');
 export default class CodesClient extends AkairoClient {
 	public logger = logger;
 	public db = Database;
+	public ipc = new Server('bot');
 
 	public commandHandler: CommandHandler = new CommandHandler(this, {
 		aliasReplacement: /-/g,
@@ -59,6 +66,14 @@ export default class CodesClient extends AkairoClient {
 
 	public constructor(ownerID: string | string[]) {
 		super({ ownerID });
+
+		this.ipc
+			.on('open', () => logger.info(MESSAGES.IPC.OPEN(process.env.IPC_PORT || 8000), { topic: TOPICS.IPC, event: EVENTS.IPC_OPEN }))
+			.on('close', () => logger.info(MESSAGES.IPC.CLOSE, { topic: TOPICS.IPC, event: EVENTS.IPC_CLOSE }))
+			.on('error', err =>
+				logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
+			.on('connect', client => logger.info(MESSAGES.IPC.CONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
+			.on('disconnect', client => logger.info(MESSAGES.IPC.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
 	}
 
 	public async start(token: string) {
@@ -68,6 +83,8 @@ export default class CodesClient extends AkairoClient {
 
 	private async _init() {
 		this.logger.info(MESSAGES.CLIENT.INIT, { topic: TOPICS.DISCORD, event: EVENTS.INIT });
+
+		await this.ipc.listen(process.env.IPC_PORT || 8000);
 
 		await this.db.connect();
 		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });

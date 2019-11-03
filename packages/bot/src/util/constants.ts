@@ -1,5 +1,6 @@
 import { stripIndents } from 'common-tags';
 import { Message } from 'discord.js';
+import { ServerSocket, NodeMessage } from 'veza';
 
 export enum COLORS {
 	PRIMARY = 0x2ecc71,
@@ -61,8 +62,22 @@ export const MESSAGES = {
 	},
 	DB: {
 		CONNECTED: 'Connected to DB'
+	},
+	IPC: {
+		OPEN: (port: string | number) => `IPC server opened on port ${port}`,
+		CLOSE: 'IPC server closed',
+		CONNECT: (client: ServerSocket) => `Client ${client.name} connected`,
+		DISCONNECT: (client: ServerSocket) => `Client ${client.name} disconnected`,
+		MESSAGE: ({ data }: NodeMessage, client: ServerSocket) => `Received message from ${client.name}: ${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}`
 	}
 };
+
+export enum IPC_TYPE {
+	GUILD = 1,
+	USER,
+	MEMBER,
+	ROLE
+}
 
 export const ERRORS = {
 	SERVER: {

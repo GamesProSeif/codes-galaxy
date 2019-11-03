@@ -20,7 +20,8 @@
 		"discord.js": "discordjs/discord.js",
 		"dotenv": "^8.2.0",
 		"node-fetch": "^2.6.0",
-		"typeorm": "^0.2.20"
+		"typeorm": "^0.2.20",
+		"veza": "^1.1.0"
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.8.0",
