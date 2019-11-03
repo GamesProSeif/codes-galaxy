@@ -4,7 +4,7 @@ import { Express, json, urlencoded, RequestHandler } from 'express';
 import * as morgan from 'morgan';
 import { join, resolve, posix as path } from 'path';
 import { Connection } from 'typeorm';
-import { Logger } from 'winston';
+import { Client } from 'veza';
 import { Database } from '@codes/models';
 import Route from './Route';
 import { logger, TOPICS, EVENTS } from '../util/logger';
@@ -13,10 +13,12 @@ import { ERRORS, MESSAGES } from '../util/constants';
 
 export default class Server {
 	public server: Express;
-	public logger: Logger;
 	public db!: Connection;
 	public path: string;
 	public port = process.env.SERVER_PORT || '5000';
+	public logger = logger;
+	public ipc = new Client('server', { maximumRetries: 3 });
+	public IPC_PORT = parseInt(process.env.IPC_PORT || '8000', 10);
 	public readonly API_METHODS = resolve(join(__dirname, '..', 'api'));
 	public readonly DEV = process.env.NODE_ENV === 'development';
 	public methods: { [key: string]: Route } = {};
@@ -25,9 +27,13 @@ export default class Server {
 	public constructor(server: Express, path: string) {
 		this.server = server;
 		this.path = path;
-		this.logger = logger;
 
-		this.port = process.env.SERVER_PORT!;
+		this.ipc
+			.on('connecting', () => logger.info(MESSAGES.IPC.CONNECTING(this.IPC_PORT), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECTING }))
+			.on('connect', client => logger.info(MESSAGES.IPC.CONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
+			.on('ready', client => logger.info(MESSAGES.IPC.READY(client), { topic: TOPICS.IPC, event: EVENTS.IPC_READY }))
+			.on('error', err => logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
+			.on('disconnect', client => logger.info(MESSAGES.IPC.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
 
 		if (process.env.NODE_ENV === 'production') {
 			this.server.enable('trust proxy');
@@ -95,6 +101,13 @@ export default class Server {
 		this.db = Database;
 		await this.db.connect();
 		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
+
+		try {
+			await this.ipc.connectTo(this.IPC_PORT);
+		} catch (error) {
+			this.logger.error(MESSAGES.IPC.NO_CONNECTION(this.IPC_PORT), { topic: TOPICS.IPC, event: EVENTS.ERROR });
+			process.exit(1);
+		}
 
 		this.setMiddlewares();
 		this.logger.info(MESSAGES.SERVER.MIDDLEWARES.ALL, { topic: TOPICS.EXPRESS, event: EVENTS.INIT });
@@ -166,7 +179,7 @@ export default class Server {
 		for (const method of methodFiles) {
 			const file: Route = new (require(method)).default();
 
-			file.init({ logger: this.logger, db: this.db });
+			file.init({ logger: this.logger, db: this.db, ipc: this.ipc });
 
 			this.register(file);
 		}
