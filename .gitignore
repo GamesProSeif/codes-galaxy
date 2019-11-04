@@ -24,6 +24,7 @@ pids
 .tmp/
 ormconfig.json
 *.tsbuildinfo
+config*.yml
 
 # Build
 dist/
