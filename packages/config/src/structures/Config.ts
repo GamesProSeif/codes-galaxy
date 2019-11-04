@@ -73,13 +73,7 @@ export class Config {
 			{
 				uri: process.env.DB_URI!
 			},
-			{ required: ['url'] }
+			{ required: ['uri'] }
 		);
-
-		this.db = data.db
-			? data.db
-			: {
-				url: process.env.DB_URI
-			};
 	}
 }

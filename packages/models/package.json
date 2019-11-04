@@ -12,6 +12,7 @@
 		"lint:fix": "eslint src --ext .ts --fix"
 	},
 	"dependencies": {
+		"@codes/config": "1.0.0",
 		"mongodb": "^3.3.3",
 		"shortid": "^2.2.15",
 		"typeorm": "^0.2.20"

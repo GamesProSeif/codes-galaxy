@@ -1,4 +1,5 @@
 import { Config } from '@codes/config';
+import { Connection, Database } from '@codes/models';
 import {
 	AkairoClient,
 	CommandHandler,
@@ -6,10 +7,8 @@ import {
 	ListenerHandler
 } from 'discord-akairo';
 import { join } from 'path';
-import { Connection } from 'typeorm';
 import { Server } from 'veza';
 import { Logger } from 'winston';
-import { Database } from '@codes/models';
 import { logger, EVENTS, TOPICS } from '../util/logger';
 import { MESSAGES } from '../util/constants';
 

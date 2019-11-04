@@ -19,7 +19,6 @@
 		"cross-env": "^6.0.3",
 		"discord-akairo": "discord-akairo/discord-akairo",
 		"discord.js": "discordjs/discord.js",
-		"dotenv": "^8.2.0",
 		"node-fetch": "^2.6.0",
 		"typeorm": "^0.2.20",
 		"veza": "^1.1.0"
