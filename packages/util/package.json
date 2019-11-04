@@ -1,7 +1,8 @@
 {
 	"name": "@codes/util",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "dist/index.js",
+	"types": "typings/index.d.ts",
 	"author": "GamesProSeif",
 	"license": "UNLICENSED",
 	"scripts": {
