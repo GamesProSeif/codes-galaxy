@@ -1,6 +1,5 @@
 import { Listener } from 'discord-akairo';
-import { EVENTS, TOPICS } from '../../util/logger';
-import { IPC_TYPE, MESSAGES } from '../../util/constants';
+import { EVENTS, IPC_TYPE, MESSAGES, TOPICS } from '@codes/constants';
 import { NodeMessage, ServerSocket } from 'veza';
 
 export default class Ready extends Listener {
@@ -20,7 +19,7 @@ export default class Ready extends Listener {
 		});
 
 		this.client.ipc.on('message', async (message: NodeMessage, client: ServerSocket) => {
-			this.client.logger.info(MESSAGES.IPC.MESSAGE(message, client), { topic: TOPICS.IPC, event: EVENTS.IPC_MESSAGE });
+			this.client.logger.info(MESSAGES.IPC.SERVER.MESSAGE(message, client), { topic: TOPICS.IPC, event: EVENTS.IPC_MESSAGE });
 
 			try {
 				let res;

@@ -3,7 +3,7 @@ import { Command } from 'discord-akairo';
 import { Message, Util } from 'discord.js';
 import fetch from 'node-fetch';
 import { inspect } from 'util';
-import { MESSAGES } from '../../util/constants';
+import { MESSAGES } from '@codes/constants';
 
 const CODE_BLOCK_REGEX = /```(?:(?<lang>\S+)\n)?\s?(?<code>[^]+?)\s?```/;
 

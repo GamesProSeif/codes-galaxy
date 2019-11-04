@@ -8,13 +8,8 @@ import {
 } from 'discord-akairo';
 import { join } from 'path';
 import { Server } from 'veza';
-import { Logger } from 'winston';
-import { logger, EVENTS, TOPICS } from '../util/logger';
-import { MESSAGES } from '../util/constants';
-
-process.on('unhandledRejection', err => {
-	logger.error(err as string, { topic: TOPICS.UNHANDLED_REJECTION, event: EVENTS.ERROR });
-});
+import { logger, Logger } from '@codes/util';
+import { EVENTS, MESSAGES, TOPICS } from '@codes/constants';
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
@@ -33,7 +28,7 @@ const inhibitorsPath = join(__dirname, '..', 'inhibitors/');
 const listenersPath = join(__dirname, '..', 'listeners/');
 
 export default class CodesClient extends AkairoClient {
-	public logger = logger;
+	public logger = logger('bot');
 	public db = Database;
 	public ipc = new Server('bot');
 
@@ -71,15 +66,19 @@ export default class CodesClient extends AkairoClient {
 	public constructor(config: Config) {
 		super({ ownerID: config.discord.ownerId });
 
+		process.on('unhandledRejection', err => {
+			this.logger.error(err as string, { topic: TOPICS.UNHANDLED_REJECTION, event: EVENTS.ERROR });
+		});
+
 		this.config = config;
 
 		this.ipc
-			.on('open', () => logger.info(MESSAGES.IPC.OPEN(process.env.IPC_PORT || 8000), { topic: TOPICS.IPC, event: EVENTS.IPC_OPEN }))
-			.on('close', () => logger.info(MESSAGES.IPC.CLOSE, { topic: TOPICS.IPC, event: EVENTS.IPC_CLOSE }))
+			.on('open', () => this.logger.info(MESSAGES.IPC.SERVER.OPEN(process.env.IPC_PORT || 8000), { topic: TOPICS.IPC, event: EVENTS.IPC_OPEN }))
+			.on('close', () => this.logger.info(MESSAGES.IPC.SERVER.CLOSE, { topic: TOPICS.IPC, event: EVENTS.IPC_CLOSE }))
 			.on('error', err =>
-				logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
-			.on('connect', client => logger.info(MESSAGES.IPC.CONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
-			.on('disconnect', client => logger.info(MESSAGES.IPC.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
+				this.logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
+			.on('connect', client => this.logger.info(MESSAGES.IPC.SERVER.CONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
+			.on('disconnect', client => this.logger.info(MESSAGES.IPC.SERVER.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
 	}
 
 	public async start() {

@@ -14,7 +14,9 @@
 	},
 	"dependencies": {
 		"@codes/config": "1.0.0",
+		"@codes/constants": "1.0.0",
 		"@codes/models": "1.0.0",
+		"@codes/util": "1.0.0",
 		"common-tags": "^1.8.0",
 		"cross-env": "^6.0.3",
 		"discord-akairo": "discord-akairo/discord-akairo",
