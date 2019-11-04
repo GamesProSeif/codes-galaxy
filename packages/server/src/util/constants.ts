@@ -11,16 +11,16 @@ export const MESSAGES = {
 			LOADED: (methodsCount: number, endpointsCount: number) =>
 				`Loaded ${methodsCount} routes with ${endpointsCount} endpoints`
 		},
-		LISTENING: (port: string) => `Server listening on http://localhost:${port}`
+		LISTENING: (port: number) => `Server listening on http://localhost:${port}`
 	},
 	DB: {
 		CONNECTED: 'Connected to DB'
 	},
 	IPC: {
 		CONNECT: (client: ClientSocket) => `Connected to ${client.name}`,
-		CONNECTING: (port: string | number) => `Connecting to port ${port}`,
+		CONNECTING: (port: number) => `Connecting to port ${port}`,
 		DISCONNECT: (client: ClientSocket) => `Disconnected from ${client.name}`,
-		NO_CONNECTION: (port: string | number) => `Cannot connect to IPC server on port ${port}. Exiting...`,
+		NO_CONNECTION: (port: number) => `Cannot connect to IPC server on port ${port}. Exiting...`,
 		READY: (client: ClientSocket) => `Connection to server ${client.name} ready`
 	},
 	ROUTES: {
