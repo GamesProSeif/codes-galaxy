@@ -12,6 +12,7 @@ export interface ServerConfig {
 
 export interface DashboardConfig {
 	port: number;
+	host: string;
 	brand: string;
 }
 
@@ -55,7 +56,8 @@ export class Config {
 			data.dashboard,
 			{
 				port: parseInt(process.env.DASHBOARD_PORT || '3000', 10),
-				brand: 'Codes'
+				brand: 'Codes',
+				host: process.env.DASHBOARD_HOST || '0.0.0.0'
 			}
 		);
 

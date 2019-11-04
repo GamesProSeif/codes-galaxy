@@ -33,6 +33,11 @@ dashboard:
   # DEFAULT: Codes
   brand: Codes
 
+  # DESC: Host of the dashboard
+  # ENV: DASHBOARD_HOST
+  # DEFAULT: "0.0.0.0"
+  host: "0.0.0.0"
+
 # DESC: IPC server configuration
 ipc:
   # DESC: Port to use for IPC server
