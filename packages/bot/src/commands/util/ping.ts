@@ -1,7 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { COLORS, MESSAGES } from '../../util/constants';
+import { COLORS, MESSAGES } from '@codes/constants';
 
 export default class PingCommand extends Command {
 	constructor() {

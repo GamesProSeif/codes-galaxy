@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, RequestHandler } from 'express';
 import { Connection } from 'typeorm';
-import { Logger } from 'winston';
+import { Logger } from '@codes/util';
 import { Client } from 'veza';
 
 type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';

@@ -22,3 +22,5 @@ export function readdirRecursive(directory: string): string[] {
 
 	return result;
 }
+
+export * from './logger';

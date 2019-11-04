@@ -1,7 +1,7 @@
+import { MESSAGES } from '@codes/constants';
+import { Code } from '@codes/models';
 import { Request, Response } from 'express';
 import Route from '../../structures/Route';
-import { Code } from '@codes/models';
-import { MESSAGES } from '../../util/constants';
 
 export default class CodeIdGET extends Route {
 	public constructor() {

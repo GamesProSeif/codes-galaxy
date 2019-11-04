@@ -1,8 +1,7 @@
+import { EVENTS, MESSAGES, TOPICS } from '@codes/constants';
+import { Code } from '@codes/models';
 import { Request, Response } from 'express';
 import Route from '../../structures/Route';
-import { Code } from '@codes/models';
-import { TOPICS, EVENTS } from '../../util/logger';
-import { MESSAGES } from '../../util/constants';
 
 export default class CodeIdDELETE extends Route {
 	public constructor() {

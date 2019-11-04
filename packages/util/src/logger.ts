@@ -1,35 +1,13 @@
 import { join } from 'path';
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format, Logger, transports } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
-export enum TOPICS {
-	EXPRESS = 'EXPRESS',
-	EXPRESS_HANDLER = 'EXPRESS_HANDLER',
-	IPC = 'IPC',
-	TYPEORM = 'TYPEORM',
-	MAIN = 'MAIN',
-	NUXT = 'NUXT',
-	UNHANDLED_REJECTION = 'UNHANDLED_REJECTION'
-}
+export { Logger } from 'winston';
 
-export enum EVENTS {
-	ERROR = 'ERROR',
-	ENDPOINT_HIT = 'ENDPOINT_HIT',
-	DEBUG = 'DEBUG',
-	CODE_DELETE = 'CODE_DELETE',
-	CODE_NEW = 'CODE_NEW',
-	INIT = 'INIT',
-	IPC_CONNECT = 'IPC_CONNECT',
-	IPC_CONNECTING = 'IPC_CONNECTING',
-	IPC_DISCONNECT = 'IPC_DISCONNECT',
-	IPC_READY = 'IPC_READY',
-	READY = 'READY',
-	WARN = 'WARN',
-}
-export const logger = createLogger({
+export const logger = (label: string): Logger => createLogger({
 	format: format.combine(
 		format.errors({ stack: true }),
-		format.label({ label: 'API' }),
+		format.label({ label: label.toUpperCase() }),
 		format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
 		format.printf((info: any): string => {
 			const { timestamp, label, level, message, topic, event, ...rest } = info;
