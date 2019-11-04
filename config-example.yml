@@ -1,0 +1,53 @@
+# DESC: Discord bot config
+discord:
+  # DESC: Token for discord bot
+  # ENV: DISCORD_TOKEN
+  # REQUIRED: true
+  token: top secret Discord token
+
+  # DESC: Owner access of discord bot
+  # DEFAULT: ["252829167320694784", "348143440405725184"]
+  ownerId:
+    - "252829167320694784"
+    - "348143440405725184"
+
+  # DESC: The server id to use
+  # DEFAULT: "530859416019533834"
+  serverId: "530859416019533834"
+
+# DESC: API server configuration
+server:
+  # DESC: Port to use for API server
+  # ENV: SERVER_PORT
+  # DEFAULT: 5000
+  port: 5000
+
+# DESC: Dashboard configuration
+dashboard:
+  # DESC: Port to use for dashboard
+  # ENV: DASHBOARD_PORT
+  # DEFAULT: 3000
+  port: 3000
+
+  # DESC: Brand name to display on the dashboard
+  # DEFAULT: Codes
+  brand: Codes
+
+  # DESC: Host of the dashboard
+  # ENV: DASHBOARD_HOST
+  # DEFAULT: "0.0.0.0"
+  host: "0.0.0.0"
+
+# DESC: IPC server configuration
+ipc:
+  # DESC: Port to use for IPC server
+  # ENV: IPC_PORT
+  # DEFAULT: 8000
+  port: 8000
+
+# DESC: Database configuration
+db:
+  # DESC: URI used to connect to database
+  # ENV: DB_URI
+  # REQUIRED: true
+  uri: top secret database URI

@@ -10,6 +10,7 @@
 		"generate": "nuxt generate"
 	},
 	"dependencies": {
+		"@codes/config": "1.0.0",
 		"@nuxtjs/axios": "^5.8.0",
 		"bootstrap": "^4.3.1",
 		"bootstrap-vue": "^2.0.4",

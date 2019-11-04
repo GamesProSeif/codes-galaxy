@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { Config } from '@codes/config';
+import { Connection, Database } from '@codes/models';
 import { Express, json, urlencoded, RequestHandler } from 'express';
 import * as morgan from 'morgan';
 import { join, resolve, posix as path } from 'path';
-import { Connection } from 'typeorm';
 import { Client } from 'veza';
-import { Database } from '@codes/models';
 import Route from './Route';
 import { logger, TOPICS, EVENTS } from '../util/logger';
 import { readdirRecursive } from '../util';
@@ -13,23 +13,23 @@ import { ERRORS, MESSAGES } from '../util/constants';
 
 export default class Server {
 	public server: Express;
+	public config: Config;
 	public db!: Connection;
 	public path: string;
-	public port = process.env.SERVER_PORT || '5000';
 	public logger = logger;
 	public ipc = new Client('server', { maximumRetries: 3 });
-	public IPC_PORT = parseInt(process.env.IPC_PORT || '8000', 10);
 	public readonly API_METHODS = resolve(join(__dirname, '..', 'api'));
 	public readonly DEV = process.env.NODE_ENV === 'development';
 	public methods: { [key: string]: Route } = {};
 	public endpoints: { [key: string]: string } = {};
 
-	public constructor(server: Express, path: string) {
+	public constructor(server: Express, path: string, config: Config) {
 		this.server = server;
 		this.path = path;
+		this.config = config;
 
 		this.ipc
-			.on('connecting', () => logger.info(MESSAGES.IPC.CONNECTING(this.IPC_PORT), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECTING }))
+			.on('connecting', () => logger.info(MESSAGES.IPC.CONNECTING(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECTING }))
 			.on('connect', client => logger.info(MESSAGES.IPC.CONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
 			.on('ready', client => logger.info(MESSAGES.IPC.READY(client), { topic: TOPICS.IPC, event: EVENTS.IPC_READY }))
 			.on('error', err => logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
@@ -103,9 +103,9 @@ export default class Server {
 		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });
 
 		try {
-			await this.ipc.connectTo(this.IPC_PORT);
+			await this.ipc.connectTo(this.config.ipc.port);
 		} catch (error) {
-			this.logger.error(MESSAGES.IPC.NO_CONNECTION(this.IPC_PORT), { topic: TOPICS.IPC, event: EVENTS.ERROR });
+			this.logger.error(MESSAGES.IPC.NO_CONNECTION(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.ERROR });
 			process.exit(1);
 		}
 
@@ -125,8 +125,8 @@ export default class Server {
 		this.server.get('/favicon.ico', (_, res) => res.redirect('/favicon.png'));
 
 		// Listen the server
-		this.server.listen(this.port);
-		this.logger.info(MESSAGES.SERVER.LISTENING(this.port), {
+		this.server.listen(this.config.server.port);
+		this.logger.info(MESSAGES.SERVER.LISTENING(this.config.server.port), {
 			topic: TOPICS.EXPRESS,
 			event: EVENTS.READY
 		});

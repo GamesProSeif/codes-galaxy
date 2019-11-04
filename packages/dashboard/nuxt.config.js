@@ -1,7 +1,13 @@
+const { ConfigParser } = require('@codes/config');
+
+const parser = new ConfigParser();
+parser.init();
+const config = parser.config;
+
 module.exports = {
 	mode: 'spa',
 	head: {
-		title: 'Codes',
+		title: config.dashboard.brand,
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -11,8 +17,11 @@ module.exports = {
 			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
 		]
 	},
+	server: {
+		port: config.dashboard.port,
+		host: config.dashboard.host
+	},
 	srcDir: `src`,
-	// buildDir: `.nuxt`,
 	loading: { color: '#00f' },
 	modules: [
 		// Doc: https://bootstrap-vue.js.org

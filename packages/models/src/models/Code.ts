@@ -2,7 +2,7 @@ import { Entity, ObjectIdColumn, Column, CreateDateColumn, UpdateDateColumn } fr
 import { generate } from 'shortid';
 
 @Entity()
-export default class Code {
+export class Code {
 	@ObjectIdColumn()
 	public id!: string;
 
