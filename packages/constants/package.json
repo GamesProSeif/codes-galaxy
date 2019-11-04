@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"common-tags": "^1.8.0",
-		"discord.js": "^11.5.1",
+		"discord.js": "discordjs/discord.js",
 		"veza": "^1.1.0"
 	},
 	"devDependencies": {
