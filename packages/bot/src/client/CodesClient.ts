@@ -1,3 +1,4 @@
+import { Config } from '@codes/config';
 import {
 	AkairoClient,
 	CommandHandler,
@@ -18,6 +19,10 @@ process.on('unhandledRejection', err => {
 
 declare module 'discord-akairo' {
 	interface AkairoClient {
+		commandHandler: CommandHandler;
+		listenerHandler: ListenerHandler;
+		inhibitorHandler: InhibitorHandler;
+		config: Config;
 		db: Connection;
 		logger: Logger;
 		ipc: Server;
@@ -64,8 +69,10 @@ export default class CodesClient extends AkairoClient {
 		directory: listenersPath
 	});
 
-	public constructor(ownerID: string | string[]) {
-		super({ ownerID });
+	public constructor(config: Config) {
+		super({ ownerID: config.discord.ownerId });
+
+		this.config = config;
 
 		this.ipc
 			.on('open', () => logger.info(MESSAGES.IPC.OPEN(process.env.IPC_PORT || 8000), { topic: TOPICS.IPC, event: EVENTS.IPC_OPEN }))
@@ -76,15 +83,15 @@ export default class CodesClient extends AkairoClient {
 			.on('disconnect', client => logger.info(MESSAGES.IPC.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
 	}
 
-	public async start(token: string) {
+	public async start() {
 		await this._init();
-		return this.login(token);
+		return this.login(this.config.discord.token);
 	}
 
 	private async _init() {
 		this.logger.info(MESSAGES.CLIENT.INIT, { topic: TOPICS.DISCORD, event: EVENTS.INIT });
 
-		await this.ipc.listen(process.env.IPC_PORT || 8000);
+		await this.ipc.listen(this.config.ipc.port);
 
 		await this.db.connect();
 		this.logger.info(MESSAGES.DB.CONNECTED, { topic: TOPICS.TYPEORM, event: EVENTS.INIT });

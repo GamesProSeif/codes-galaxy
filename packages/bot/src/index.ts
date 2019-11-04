@@ -1,9 +1,13 @@
-import './util/env';
+import { ConfigParser } from '@codes/config';
 import CodesClient from './client/CodesClient';
 
 const start = async () => {
-	const client = new CodesClient(['252829167320694784', '348143440405725184']);
-	await client.start(process.env.DISCORD_TOKEN!);
+	const parser = new ConfigParser();
+	parser.init();
+	const config = parser.config;
+
+	const client = new CodesClient(config);
+	await client.start();
 	return client;
 };
 
