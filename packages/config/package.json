@@ -1,0 +1,32 @@
+{
+	"name": "@codes/config",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"types": "typings/index.d.ts",
+	"author": "GamesProSeif",
+	"license": "UNLICENSED",
+	"scripts": {
+		"build": "tsc",
+		"build:watch": "tsc -w",
+		"lint": "eslint src --ext .ts",
+		"lint:fix": "eslint src --ext .ts --fix"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"yaml": "^1.7.2"
+	},
+	"devDependencies": {
+		"@types/yaml": "^1.2.0",
+		"@typescript-eslint/eslint-plugin": "^2.6.0",
+		"@typescript-eslint/parser": "^2.6.0",
+		"eslint": "^6.6.0",
+		"eslint-config-marine": "^5.3.2",
+		"typescript": "^3.6.4"
+	},
+	"eslintConfig": {
+		"extends": "marine/node",
+		"rules": {
+			"@typescript-eslint/explicit-member-accessibility": "off"
+		}
+	}
+}
