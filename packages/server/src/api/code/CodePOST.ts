@@ -1,8 +1,7 @@
+import { ERRORS, EVENTS, TOPICS } from '@codes/constants';
+import { Code } from '@codes/models';
 import { Request, Response } from 'express';
 import Route from '../../structures/Route';
-import { Code } from '@codes/models';
-import { TOPICS, EVENTS } from '../../util/logger';
-import { ERRORS } from '../../util/constants';
 
 export default class CodePOST extends Route {
 	public constructor() {

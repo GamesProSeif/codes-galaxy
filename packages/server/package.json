@@ -14,14 +14,14 @@
 	},
 	"dependencies": {
 		"@codes/config": "1.0.0",
+		"@codes/constants": "1.0.0",
 		"@codes/models": "1.0.0",
+		"@codes/util": "1.0.0",
 		"cross-env": "^6.0.3",
 		"express": "^4.17.1",
 		"morgan": "^1.9.1",
 		"typeorm": "^0.2.20",
-		"veza": "^1.1.0",
-		"winston": "^3.2.1",
-		"winston-daily-rotate-file": "^4.2.1"
+		"veza": "^1.1.0"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.2",

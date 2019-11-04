@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Config } from '@codes/config';
+import { ERRORS, EVENTS, MESSAGES, TOPICS } from '@codes/constants';
 import { Connection, Database } from '@codes/models';
+import { logger, readdirRecursive } from '@codes/util';
 import { Express, json, urlencoded, RequestHandler } from 'express';
 import * as morgan from 'morgan';
 import { join, resolve, posix as path } from 'path';
 import { Client } from 'veza';
 import Route from './Route';
-import { logger, TOPICS, EVENTS } from '../util/logger';
-import { readdirRecursive } from '../util';
-import { ERRORS, MESSAGES } from '../util/constants';
 
 export default class Server {
 	public server: Express;
 	public config: Config;
 	public db!: Connection;
 	public path: string;
-	public logger = logger;
+	public logger = logger('server');
 	public ipc = new Client('server', { maximumRetries: 3 });
 	public readonly API_METHODS = resolve(join(__dirname, '..', 'api'));
 	public readonly DEV = process.env.NODE_ENV === 'development';
@@ -29,11 +28,11 @@ export default class Server {
 		this.config = config;
 
 		this.ipc
-			.on('connecting', () => logger.info(MESSAGES.IPC.CONNECTING(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECTING }))
-			.on('connect', client => logger.info(MESSAGES.IPC.CONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
-			.on('ready', client => logger.info(MESSAGES.IPC.READY(client), { topic: TOPICS.IPC, event: EVENTS.IPC_READY }))
-			.on('error', err => logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
-			.on('disconnect', client => logger.info(MESSAGES.IPC.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
+			.on('connecting', () => this.logger.info(MESSAGES.IPC.CLIENT.CONNECTING(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECTING }))
+			.on('connect', () => this.logger.info(MESSAGES.IPC.CLIENT.CONNECT(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.IPC_CONNECT }))
+			.on('ready', client => this.logger.info(MESSAGES.IPC.CLIENT.READY(client), { topic: TOPICS.IPC, event: EVENTS.IPC_READY }))
+			.on('error', err => this.logger.error(JSON.stringify(err, null, 2), { topic: TOPICS.IPC, event: EVENTS.ERROR }))
+			.on('disconnect', client => this.logger.info(MESSAGES.IPC.CLIENT.DISCONNECT(client), { topic: TOPICS.IPC, event: EVENTS.IPC_DISCONNECT }));
 
 		if (process.env.NODE_ENV === 'production') {
 			this.server.enable('trust proxy');
@@ -105,7 +104,7 @@ export default class Server {
 		try {
 			await this.ipc.connectTo(this.config.ipc.port);
 		} catch (error) {
-			this.logger.error(MESSAGES.IPC.NO_CONNECTION(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.ERROR });
+			this.logger.error(MESSAGES.IPC.CLIENT.NO_CONNECTION(this.config.ipc.port), { topic: TOPICS.IPC, event: EVENTS.ERROR });
 			process.exit(1);
 		}
 

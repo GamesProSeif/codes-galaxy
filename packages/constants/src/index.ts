@@ -73,7 +73,7 @@ export const MESSAGES = {
 	},
 	IPC: {
 		CLIENT: {
-			CONNECT: (client: ClientSocket) => `Connected to ${client.name}`,
+			CONNECT: (port: number) => `Connected to ${port}`,
 			CONNECTING: (port: number) => `Connecting to port ${port}`,
 			DISCONNECT: (client: ClientSocket) => `Disconnected from ${client.name}`,
 			NO_CONNECTION: (port: number) => `Cannot connect to IPC server on port ${port}. Exiting...`,
