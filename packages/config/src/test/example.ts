@@ -1,5 +1,5 @@
 import '../util/env';
-import ConfigParser from '../structures/ConfigParser';
+import { ConfigParser } from '../structures/ConfigParser';
 import { join } from 'path';
 
 const parser = new ConfigParser(join(process.cwd(), '..', '..', 'config-example.yml'));

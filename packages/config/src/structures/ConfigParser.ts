@@ -1,9 +1,9 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse } from 'yaml';
-import Config from './Config';
+import { Config } from './Config';
 
-export default class ConfigParser {
+export class ConfigParser {
 	public config!: Config;
 	public path: string;
 

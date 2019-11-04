@@ -23,7 +23,7 @@ export interface DbConfig {
 	uri: string;
 }
 
-export default class Config {
+export class Config {
 	public discord: DiscordConfig;
 	public server: ServerConfig;
 	public dashboard: DashboardConfig;
