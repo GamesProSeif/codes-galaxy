@@ -12,7 +12,7 @@ export default class CodeIdDELETE extends Route {
 	}
 
 	public async exec(req: Request, res: Response): Promise<void> {
-		const codeRepo = this.db.getRepository(Code);
+		const codeRepo = this.server.db.getRepository(Code);
 		const code = await codeRepo.findOne({ shortid: req.params.id });
 
 		if (!code) {
@@ -21,7 +21,7 @@ export default class CodeIdDELETE extends Route {
 		}
 
 		await codeRepo.remove(code);
-		this.logger.info(code.shortid, { topic: TOPICS.TYPEORM, event: EVENTS.CODE_DELETE });
+		this.server.logger.info(code.shortid, { topic: TOPICS.TYPEORM, event: EVENTS.CODE_DELETE });
 
 		res.status(200).json({ code });
 	}

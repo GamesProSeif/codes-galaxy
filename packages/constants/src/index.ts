@@ -96,6 +96,9 @@ export const MESSAGES = {
 		},
 		CODE_ID_DELETE: {
 			NOT_FOUND: 'Code not found'
+		},
+		DISCORD_CALLBACK_GET: {
+			NO_CODE: 'No code provided'
 		}
 	}
 };

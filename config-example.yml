@@ -15,6 +15,18 @@ discord:
   # DEFAULT: "530859416019533834"
   serverId: "530859416019533834"
 
+  # DESC: The discord client id to use
+  # ENV: CLIENT_ID
+  # DEFAULT: ""
+  # REQUIRED: true
+  clientId: ""
+
+  # DESC: The discord client secret to use
+  # ENV: CLIENT_SECRET
+  # DEFAULT: ""
+  # REQUIRED: true
+  clientSecret: ""
+
 # DESC: API server configuration
 server:
   # DESC: Port to use for API server

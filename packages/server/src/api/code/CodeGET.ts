@@ -12,7 +12,7 @@ export default class CodeGET extends Route {
 	}
 
 	public async exec(_req: Request, res: Response): Promise<void> {
-		const codeRepo = this.db.getRepository(Code);
+		const codeRepo = this.server.db.getRepository(Code);
 		const codes = await codeRepo.find({
 			select: ['id', 'shortid', 'title', 'description', 'language', 'tags']
 		});

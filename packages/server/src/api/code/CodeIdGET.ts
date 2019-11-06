@@ -12,7 +12,7 @@ export default class CodeIdGET extends Route {
 	}
 
 	public async exec(req: Request, res: Response): Promise<void> {
-		const codeRepo = this.db.getRepository(Code);
+		const codeRepo = this.server.db.getRepository(Code);
 		const code = await codeRepo.findOne({ shortid: req.params.id });
 
 		if (!code) {

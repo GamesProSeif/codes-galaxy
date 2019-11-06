@@ -1,9 +1,11 @@
 import { validate } from '../util';
 
 export interface DiscordConfig {
+	clientSecret: string;
+	clientId: string;
 	ownerId: string[];
-	token: string;
 	serverId: string;
+	token: string;
 }
 
 export interface ServerConfig {
@@ -36,11 +38,13 @@ export class Config {
 			'discord',
 			data.discord,
 			{
+				clientId: process.env.CLIENT_ID || '',
+				clientSecret: process.env.CLIENT_SECRET || '',
 				ownerId: ['252829167320694784', '348143440405725184'],
-				token: process.env.DISCORD_TOKEN!,
-				serverId: '530859416019533834'
+				serverId: '530859416019533834',
+				token: process.env.DISCORD_TOKEN || ''
 			},
-			{ required: ['token'] }
+			{ required: ['token', 'clientId', 'clientSecret'] }
 		);
 
 		this.server = validate<ServerConfig>(

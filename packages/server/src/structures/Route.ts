@@ -1,16 +1,12 @@
 import { NextFunction, Request, Response, RequestHandler } from 'express';
-import { Connection } from 'typeorm';
-import { Logger } from '@codes/util';
-import { Client } from 'veza';
+import Server from './Server';
 
 type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export default abstract class Route {
+	public server!: Server;
 	public method?: RequestMethod;
 	public endpoint?: string[] | RegExp[];
-	public logger!: Logger;
-	public db!: Connection;
-	public ipc!: Client;
 	public root?: boolean;
 	public order?: number;
 	public middlewares?: RequestHandler[];
@@ -50,15 +46,8 @@ export default abstract class Route {
 		return this.constructor.name;
 	}
 
-	public init(data: {
-		logger: Logger;
-		db: Connection;
-		ipc: Client;
-	}): Route {
-		this.logger = data.logger;
-		this.db = data.db;
-		this.ipc = data.ipc;
-
+	public init(server: Server): Route {
+		this.server = server;
 		return this;
 	}
 }

@@ -178,7 +178,7 @@ export default class Server {
 		for (const method of methodFiles) {
 			const file: Route = new (require(method)).default();
 
-			file.init({ logger: this.logger, db: this.db, ipc: this.ipc });
+			file.init(this);
 
 			this.register(file);
 		}
@@ -191,5 +191,11 @@ export default class Server {
 			});
 
 		return this;
+	}
+
+	public baseURL(secure: boolean, hostname: string, path?: string) {
+		return process.env.NODE_ENV === 'development'
+			? `http://localhost:${this.config.server.port}${path || ''}`
+			: `${secure ? 'https' : 'http'}://${hostname}${path || ''}`;
 	}
 }

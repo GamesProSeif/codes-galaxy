@@ -12,7 +12,7 @@ export default class CodePOST extends Route {
 	}
 
 	public async exec(req: Request, res: Response): Promise<void> {
-		const codeRepo = this.db.getRepository(Code);
+		const codeRepo = this.server.db.getRepository(Code);
 
 		if (!req.body ||
 			!req.body.author ||
@@ -35,7 +35,7 @@ export default class CodePOST extends Route {
 		code.tags = req.body.tags || [];
 
 		await codeRepo.save(code);
-		this.logger.info(code.shortid, { topic: TOPICS.TYPEORM, event: EVENTS.CODE_NEW });
+		this.server.logger.info(code.shortid, { topic: TOPICS.TYPEORM, event: EVENTS.CODE_NEW });
 
 		res.status(200).json({ code });
 	}
