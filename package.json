@@ -5,7 +5,8 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "lerna run build"
+		"build": "lerna run build",
+		"lint": "lerna run --ignore dashboard lint"
 	},
 	"devDependencies": {
 		"lerna": "^3.18.3"
