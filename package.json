@@ -1,5 +1,5 @@
 {
-	"name": "codes-support",
+	"name": "codes-galaxy",
 	"private": true,
 	"workspaces": [
 		"packages/*"
